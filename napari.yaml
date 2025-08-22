@@ -1,0 +1,18 @@
+#napari.yaml
+name: lumin
+display_name: LUMIN
+contributions:
+  commands:
+    - id: lumin.segmentation_widget
+      python_name: lumin._widget:segmentation_widget
+      title: Segmentation and signal extraction
+    - id: lumin.single_cell_widget
+      python_name: lumin._widget:single_cell_widget
+      title: Single-cell data analysis 
+
+
+  widgets:
+    - command: lumin.segmentation_widget
+      display_name: Segmentation and signal extraction
+    - command: lumin.single_cell_widget
+      display_name: Single-cell data analysis 

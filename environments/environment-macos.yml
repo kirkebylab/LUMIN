@@ -1,0 +1,29 @@
+name: ca_env
+channels:
+- conda-forge
+dependencies:
+- python=3.10
+- magicgui
+- pandas
+- scikit-image
+- scikit-learn
+- scipy
+- matplotlib
+- seaborn
+- natsort
+- notebook
+- ipykernel
+- pip
+- pip:
+  - cellpose==3.1.1.1
+  - stardist==0.9.1
+  - pca
+  - napari-blob-detection==0.0.2
+  - csbdeep
+  - tensorflow
+  - napari[all]
+  - tensorflow-metal
+  - opencv-python-headless
+  - numpy<2.0.0
+
+
