@@ -1,1 +1,6 @@
 notes.txt
+/Output
+.*
+/test_data
+*.pyc
+lumin.egg*

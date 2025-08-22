@@ -20,6 +20,7 @@ dependencies:
 - notebook
 - ipykernel
 - pip
+- nomkl
 - pip:
   - cellpose==3.1.1.1
   - stardist==0.9.1

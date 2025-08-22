@@ -1,0 +1,1 @@
+from ._widget import napari_experimental_provide_dock_widget
