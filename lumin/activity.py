@@ -24,13 +24,6 @@ def spike(cell_properties_df: pd.DataFrame = None, prominence: float = None, amp
         print('trace length spike calling:', len(window_trace))
         print(start_frame, end_frame)
 
-        #print(start_frame, end_frame)
-
-        #print(len(cell['dff']))
-        #trace = cell['dff'][start_frame:end_frame]
-        #print(len(trace))
-        
-
         peak_location, peak_properties = find_peaks(trace, prominence = prominence, width=0, height=0)
         peak_properties.update({'peak_location':peak_location})
         peak_properties_df = pd.DataFrame(peak_properties)
@@ -64,8 +57,7 @@ def spike(cell_properties_df: pd.DataFrame = None, prominence: float = None, amp
     cell_properties_df['decay_time'] = [np.mean(x) * imaging_interval if len(x) != 0 else 0 for x in decay_time_list ]
     cell_properties_df['low_quality_peaks'] = low_quality_peak_list
 
-    #cell_properties_df['low_quality_peaks'] = low_quality_peak_list
-    #cell_properties_df.to_csv('cell_properties_df.csv')
+    cell_properties_df["response"] = np.where(cell_properties_df["frequency"] > 0, "active", "inactive")
     
 
     return cell_properties_df, start_frame, end_frame

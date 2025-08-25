@@ -287,11 +287,13 @@ def overlay_events(cell_properties_df: pd.DataFrame):
             
         if len(locations) > 0:
             radius = int(np.sqrt(area / np.pi))
+            n_frames = mask.shape[0]
             for frame_idx in locations:
-                circle(mask[frame_idx-1], centroids, int(radius*1.5), color=100, thickness=2)
-                circle(mask[frame_idx], centroids, int(radius*1.5), color=100, thickness=2)
-                circle(mask[frame_idx+1], centroids, int(radius*1.5), color=100, thickness=2)
-                circle(mask[frame_idx+2], centroids, int(radius*1.5), color=100, thickness=2)
+                for offset in [-1, 0, 1, 2]:
+                    idx = frame_idx + offset
+                    if 0 <= idx < n_frames:   # only draw if within valid range
+                        circle(mask[idx], centroids, int(radius*1.5), color=100, thickness=2)
+
 
     return stack, mask
 
@@ -526,6 +528,7 @@ def beeswarm(cell_properties_df: pd.DataFrame,
              palette: dict = None,
              ax=None,
              max_plot_width=0.8,
+             hue_separation=0.3,
              separation_between_plots=1,
              brace=False,
              std_threshold=None, 
@@ -566,7 +569,7 @@ def beeswarm(cell_properties_df: pd.DataFrame,
 
     # offsets for hue groups
     n_hue = len(hue_categories)
-    offset_range = np.linspace(-0.3, 0.3, n_hue) if n_hue > 1 else [0]
+    offset_range = np.linspace(-hue_separation,hue_separation, n_hue) if n_hue > 1 else [0]
 
     for i, xc in enumerate(x_categories):
         for j, hc in enumerate(hue_categories):
@@ -595,7 +598,7 @@ def beeswarm(cell_properties_df: pd.DataFrame,
             ax.boxplot(
                 dist,
                 positions=[center],         # manual x-location
-                widths=0.5,
+                widths=max_plot_width-0.1,
                 showfliers=False,
                 showcaps=True,
                 patch_artist=True,

@@ -11,7 +11,7 @@ cd LUMIN
 
 
 Installation:
-conda env create -f napari_scripts/environment-macos.yml
+conda create -n lumin_env python -c conda-forge
 
 Activate:
 conda activate ca_env
@@ -26,4 +26,5 @@ Launching napari:
 napari
 
 
+new project dir for each segmentation
 

@@ -1,4 +1,4 @@
-name: ca_env
+name: lumin_env
 channels:
 - conda-forge
 dependencies:
@@ -20,9 +20,9 @@ dependencies:
   - pca
   - napari-blob-detection==0.0.2
   - csbdeep
-  - tensorflow
-  - napari[all]
-  - tensorflow-metal
+  - napari[all]==0.6.3
+  - tensorflow-macos
+  - tensorflow-metal==1.0.1
   - opencv-python-headless
   - numpy<2.0.0
 

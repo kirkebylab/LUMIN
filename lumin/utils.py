@@ -27,7 +27,7 @@ def read_and_project_image(filepath: str = None, first_frame: int = 0):
 
 
 
-def parse_input_output(input_file: str = None, project_dir: str = None, selection_mode: str = None):
+def parse_input_output(input_file: str = None, project_dir: str = None, selection_mode: str = None, co_stain: bool = False):
     try:
         image_df = pd.read_csv(input_file,  index_col=None, sep=None)
         image_df['image_id'] = image_df['filename'].astype(str) + '_' + image_df['plate_id'].astype(str) 
@@ -45,8 +45,11 @@ def parse_input_output(input_file: str = None, project_dir: str = None, selectio
         else: # Otherwise create output DF
             if os.path.exists(project_dir): 
                 shutil.rmtree(project_dir, ignore_errors=True)
+            if co_stain == True:
+                annotated_image_df = pd.DataFrame(columns=['image_id','filename','biological_replicate', 'stimulation','plate_id', 'marker_name','max_label','image_stack','mask'])
+            else: 
+                annotated_image_df = pd.DataFrame(columns=['image_id','filename','biological_replicate', 'stimulation','plate_id', 'max_label','image_stack','mask'])
 
-            annotated_image_df = pd.DataFrame(columns=['image_id','filename','biological_replicate', 'stimulation','plate_id', 'marker_name','max_label','image_stack','mask'])
     except Exception as e: 
         print("\nAn error occurred:", e)
         traceback.print_exc()
@@ -184,7 +187,7 @@ def compute_auc(cell_properties_df: pd.DataFrame, start_frame: int  = None, end_
     return cell_properties_df
 
 # Check for the column names, very risky function
-def percentage_responding_baseline(cell_properties_df: pd.DataFrame):
+'''def percentage_responding_baseline(cell_properties_df: pd.DataFrame):
 
     columns = list(set(cell_properties_df.columns).difference(['label', 'centroid-0', 'centroid-1', 'ca_intensity',
     'overlap_fraction_nuclear', 'nuclear_area', 'cell_area', 'nuclear_id','area',
@@ -231,8 +234,78 @@ def percentage_responding_baseline(cell_properties_df: pd.DataFrame):
         response_perc_rep_df = response_perc_well_df.groupby(['biological_replicate', 'stimulation'], observed=True)['proportion_positive_cells'].mean().reset_index()
 
 
+    return response_perc_well_df, response_perc_rep_df'''
+
+
+''''response_perc_well_df = cell_properties_df[columns].drop_duplicates().reset_index(drop=True)
+
+    if 'marker' in cell_properties_df.columns:
+        grouped = cell_properties_df.groupby(['stimulation', 'image_id', 'marker'])
+    else:
+        grouped = cell_properties_df.groupby(['stimulation', 'image_id'])
+
+    # Count how many are "above" and "below" per group
+    counts = grouped['response'].value_counts().unstack(fill_value=0)
+
+    # Make sure "above" and "below" columns exist
+    for col in ['above', 'below']:
+        if col not in counts.columns:
+            counts[col] = 0
+'''
+
+
+def percentage_responding(cell_properties_df: pd.DataFrame, analysis_type = None):
+    columns = list(set(cell_properties_df.columns).difference(['label', 'centroid-0', 'centroid-1', 'ca_intensity',
+    'overlap_fraction_nuclear', 'nuclear_area', 'cell_area', 'nuclear_id', 'area','AUC_kcl','AUC','response',
+    'raw', 'mask_path', 'filepath', 'Unnamed: 0', 'dff', 'baseline', 'peak_location','rise_time','amplitude', 'decay_time', 'low_quality_peaks', 'prominence', 'width', 'frequency']))
+
+    response_perc_well_df = cell_properties_df[columns].drop_duplicates().reset_index(drop=True)
+
+    if 'marker' in cell_properties_df.columns:
+        group_cols = ['stimulation', 'image_id', 'marker']
+    else:
+        group_cols = ['stimulation', 'image_id']
+
+    # Count active/inactive cells
+    counts = cell_properties_df.groupby(group_cols)['response'].value_counts().unstack(fill_value=0)
+
+    col_dict = {'spontaneous': ['active', 'inactive'], 'baseline': ['above', 'below']}
+    # Ensure both columns exist
+    for col in col_dict[analysis_type]:
+        if col not in counts.columns:
+            counts[col] = 0
+
+    if analysis_type == 'spontaneous':
+        # Calculate proportion
+        counts['proportion_responding'] = round(counts['active'] / counts.sum(axis=1) * 100, 2)
+        response_col = 'proportion_responding'
+
+    elif analysis_type == 'baseline':
+        # Calculate proportions
+        counts['proportion_positive_cells'] = round(counts['above'] / counts.sum(axis=1) * 100, 2)
+        counts['proportion_negative_cells'] = round(counts['below'] / counts.sum(axis=1) * 100, 2)
+        response_col = 'proportion_positive_cells'
+
+    counts = counts.reset_index()
+    response_perc_well_df = response_perc_well_df.merge(counts, on=group_cols, how='left')
+
+
+    # Compute replicate-level means
+    if 'marker' in cell_properties_df.columns:
+        response_perc_rep_df = response_perc_well_df.groupby(
+            ['biological_replicate', 'stimulation', 'marker'], observed=True
+        )[response_col].mean().reset_index()
+    else:
+        response_perc_rep_df = response_perc_well_df.groupby(
+            ['biological_replicate', 'stimulation'], observed=True
+        )[response_col].mean().reset_index()
+
     return response_perc_well_df, response_perc_rep_df
 
+
+
+
+'''
 
 def percentage_responding_spontaneous(cell_properties_df: pd.DataFrame):
     columns = list(set(cell_properties_df.columns).difference(['label', 'centroid-0', 'centroid-1', 'ca_intensity',
@@ -256,7 +329,7 @@ def percentage_responding_spontaneous(cell_properties_df: pd.DataFrame):
 
     
     return response_perc_well_df, response_perc_rep_df
-
+'''
 def scale_spike_properties(cell_properties_df: pd.DataFrame):
 
     features_df = cell_properties_df[['frequency','width','rise_time','decay_time','amplitude']]
