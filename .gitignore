@@ -4,3 +4,5 @@ notes.txt
 /test_data
 *.pyc
 lumin.egg*
+/build
+/environments
