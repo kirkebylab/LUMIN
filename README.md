@@ -84,11 +84,23 @@ napari
 2. Select desiread pipeline from Napari plugins:
    - Pugins > LUMIN > Segmentation and signal extraction
    - Pugins > LUMIN > Single-cell data analysis
+  
+Settings indicated below are the ones used during in the manuscript, and provided here as examples.
 
 ### Transient activity analysis
 ####
-1. Select Segmentation and signal extraction -pipeline
-2. 
+1. Select Segmentation and signal extraction -pipeline and apply following settings:
+
+2. Press 'Test settings on random image' -button to sample random image from input. Once ready apply following post-processing settings and evaluate impact of configured settings:
+
+
+The scale of post-processing settings are determined based on maximum seen value * 2 (by default). To increase the scale you might need to sample another image.
+3. User can play around with the setting and continue sampling random image until satisfied with the results
+4. 
+6. 
+7.
+8.
+9. for segmentation post-processing
 
 ### Baseline shift analysis
 
@@ -132,6 +144,7 @@ conda create -n lumin_env python=3.10 cudatoolkit=11.2 cudnn=8.1.0 -c conda-forg
 
 
 tested with x64 windows 11 pro
+
 
 
 
