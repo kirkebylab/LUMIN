@@ -38,7 +38,7 @@ conda activate lumin_env
 ```bash
 pip install -e .
 ```
-8. Install jupyter kernel (optional, enables downstream analysis or figure polishing of LUMIN's tabular output):
+8. Install jupyter kernel (optional, enables downstream analysis or figure polishing of LUMIN generated tabular output):
 ```bash
 python -m ipykernel install --user --name=ca_env
 ```
@@ -67,7 +67,7 @@ conda activate lumin_env
 ```bash
 pip install -e .
 ```
-8. Install jupyter kernel (optional, enables downstream analysis or figure polishing of LUMIN's tabular output):
+8. Install jupyter kernel (optional, enables downstream analysis or figure polishing of LUMIN generated tabular output):
 ```bash
 python -m ipykernel install --user --name=ca_env
 ```
@@ -121,6 +121,7 @@ conda create -n lumin_env python=3.10 cudatoolkit=11.2 cudnn=8.1.0 -c conda-forg
 
 
 tested with x64 windows 11 pro
+
 
 
 
