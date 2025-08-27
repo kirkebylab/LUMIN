@@ -77,7 +77,19 @@ python -m ipykernel install --user --name=ca_env
 ## Data loading
 
 ## Example analysis workflow
+1. Launch napari:
+```bash
+napari
+```
+
+2. Select desiread pipeline from Napari plugins:
+   - Pugins > LUMIN > Segmentation and signal extraction
+   - Pugins > LUMIN > Single-cell data analysis
+
 ### Transient activity analysis
+####
+1. Select Segmentation and signal extraction -pipeline
+2. 
 
 ### Baseline shift analysis
 
@@ -121,6 +133,7 @@ conda create -n lumin_env python=3.10 cudatoolkit=11.2 cudnn=8.1.0 -c conda-forg
 
 
 tested with x64 windows 11 pro
+
 
 
 
