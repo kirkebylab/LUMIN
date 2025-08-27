@@ -2,7 +2,6 @@
 
 Lumin is a ....
 
-<img src="assets/fig1.jpg" >
 
 ## Documentation
 To be updated ... 
@@ -133,6 +132,7 @@ conda create -n lumin_env python=3.10 cudatoolkit=11.2 cudnn=8.1.0 -c conda-forg
 
 
 tested with x64 windows 11 pro
+
 
 
 
