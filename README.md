@@ -28,3 +28,13 @@ napari
 
 new project dir for each segmentation
 
+
+
+conda create -n lumin_env python=3.10 -c conda-forge
+
+conda create -n lumin_env python=3.10 cudatoolkit=11.2 cudnn=8.1.0 -c conda-forge
+
+
+tested with x64 windows 11 pro
+
+
