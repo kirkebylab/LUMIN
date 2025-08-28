@@ -70,7 +70,7 @@ try:
         well_list = [os.path.basename(path).rsplit('_', 2)[-2] for path in image_paths]
 
         # Generate df containing image path and well id
-        df = pd.DataFrame({'tiff_paths': image_paths, 'well': well_list, 'exp_id': exp})
+        df = pd.DataFrame({'tiff_paths': image_paths, 'well': well_list, 'plate_id': exp})
 
         # Generate output folder
         output_folder = os.path.join(param_output_folder, 'image_stacks', exp)
@@ -85,7 +85,7 @@ try:
             logging.info(f'Well: {value} | Stack dtype: {image_stack.dtype} | Stack shape: {image_stack.shape}')
 
             skimage.io.imsave(os.path.join(output_folder, f'{value}.tiff'), image_stack)
-            stack_l.append({'exp_id': exp, 'image_name': value, 'image_path': os.path.join(output_folder, f'{value}.tiff')})
+            stack_l.append({'plate_id': exp, 'filename': value, 'filepath': os.path.join(output_folder, f'{value}.tiff')})
             
 
         
@@ -97,7 +97,7 @@ try:
     # Save the dataframe
     #df.to_csv(os.path.join(param_output_folder, 'image_stacking.csv'))
     stack_df = pd.DataFrame(stack_l)
-    stack_df.to_csv(os.path.join(param_output_folder, 'ca_metadata.csv'), sep=';', index=None)
+    stack_df.to_csv(os.path.join(param_output_folder, 'image_stack_paths.csv'), sep=';', index=None)
 
 
     logging.info('Script finished without errors')

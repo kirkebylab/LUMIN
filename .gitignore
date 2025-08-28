@@ -6,3 +6,5 @@ notes.txt
 lumin.egg*
 /build
 /environments
+__pycache__/
+*.zip
