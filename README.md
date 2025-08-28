@@ -25,7 +25,7 @@ cd LUMIN
 ```
 5. Create conda environment:
 ```bash
-conda create -n lumin_env python -c conda-forge -y
+conda create -n lumin_env python=3.10 -c conda-forge -y
 ``````
 
 6. Activate conda environment:
@@ -39,7 +39,7 @@ pip install -e .
 ```
 8. Install jupyter kernel (optional, enables downstream analysis or figure polishing of LUMIN generated tabular output):
 ```bash
-python -m ipykernel install --user --name=ca_env
+python -m ipykernel install --user --name=lumin_env
 ```
 
 #### Windows
@@ -180,6 +180,7 @@ conda create -n lumin_env python=3.10 cudatoolkit=11.2 cudnn=8.1.0 -c conda-forg
 
 
 tested with x64 windows 11 pro
+
 
 
 
