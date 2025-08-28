@@ -75,9 +75,9 @@ https://napari.org/dev/howtos/layers/image.html
 
 ## Data loading
 
-To load testing data run: 
+Testing data can be loaded from https://www.dropbox.com/scl/fo/z1gg916e09zk5gmb6yrqn/ALrZjemEdyoNE28Tss1efxs?rlkey=1ljkizlzhdwxpeoqggp40zqpm&dl=0
 
-https://www.dropbox.com/scl/fo/z1gg916e09zk5gmb6yrqn/ALrZjemEdyoNE28Tss1efxs?rlkey=1ljkizlzhdwxpeoqggp40zqpm&dl=0
+It should be downloaded to LUMIN folder.
 
 ## Example analysis workflow
 1. Launch napari:
@@ -180,6 +180,7 @@ conda create -n lumin_env python=3.10 cudatoolkit=11.2 cudnn=8.1.0 -c conda-forg
 
 
 tested with x64 windows 11 pro
+
 
 
 
