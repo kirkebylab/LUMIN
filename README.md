@@ -77,7 +77,7 @@ https://napari.org/dev/howtos/layers/image.html
 
 Testing data can be loaded from https://www.dropbox.com/scl/fo/z1gg916e09zk5gmb6yrqn/ALrZjemEdyoNE28Tss1efxs?rlkey=1ljkizlzhdwxpeoqggp40zqpm&dl=0
 
-It should be downloaded to LUMIN folder.
+Download it to `{local_path}/LUMIN` folder and unzip
 
 ## Example analysis workflow
 1. Launch napari:
@@ -95,8 +95,8 @@ Settings indicated below are the ones used during in the manuscript, and provide
 ####
 1. Select Segmentation and signal extraction -pipeline and apply following settings thorugh GUI input fields:
 ```
-Input file: /Volumes/T9/Ca_data/exp_pharmacology/input_data.csv
-Project directory: /Volumes/T9/Ca_data/exp_pharmacology/Analysis_new_env
+Input file: {Select ca_spontanoeus_input_data.csv from test_data folder}
+Project directory: {Select project folder for instance generate Spontanoeus_project to desired location}
 ROI selection mode: Automated
 Nuclear stain: None
 Stain to segment: Cytoplasmic (Cellpose)
@@ -180,6 +180,7 @@ conda create -n lumin_env python=3.10 cudatoolkit=11.2 cudnn=8.1.0 -c conda-forg
 
 
 tested with x64 windows 11 pro
+
 
 
 
