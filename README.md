@@ -71,7 +71,7 @@ pip install -e .
 python -m ipykernel install --user --name=ca_env
 ```
 
-
+https://napari.org/dev/howtos/layers/image.html
 
 ## Data loading
 
@@ -82,25 +82,57 @@ napari
 ```
 
 2. Select desiread pipeline from Napari plugins:
-   - Pugins > LUMIN > Segmentation and signal extraction
-   - Pugins > LUMIN > Single-cell data analysis
+   - Plugins > LUMIN > Segmentation and signal extraction
+   - Plugins > LUMIN > Single-cell data analysis
   
 Settings indicated below are the ones used during in the manuscript, and provided here as examples.
 
 ### Transient activity analysis
 ####
-1. Select Segmentation and signal extraction -pipeline and apply following settings:
+1. Select Segmentation and signal extraction -pipeline and apply following settings thorugh GUI input fields:
+```
+Input file: /Volumes/T9/Ca_data/exp_pharmacology/input_data.csv
+Project directory: /Volumes/T9/Ca_data/exp_pharmacology/Analysis_new_env
+ROI selection mode: Automated
+Nuclear stain: None
+Stain to segment: Cytoplasmic (Cellpose)
+Model: cyto2
+Diameter: 30
+Cell probability threshold: 0.0
+Flow threshold: 0.4
+```
 
-2. Press 'Test settings on random image' -button to sample random image from input. Once ready apply following post-processing settings and evaluate impact of configured settings:
+3. Press `Test settings on random image` -button to sample random image from input. Once the image appears in the canvas apply following post-processing settings and evaluate impact of configured settings:
+
+```
+Cell area: 350 - 5600
+Calcium intensity: 350 - 8000
+```
+
+The scale of post-processing settings are determined based on maximum value of sampled images * 2 (by default). To increase the scale you might need to sample another image.
+
+4. User can play around with the setting and continue sampling random image until satisfied with the results. (This process will not save any output)
+5. Press `Run` -button to execute the Segmentation and signal extraction -pipeline. This will process all files indicated in the `Input file` and create a `Segmentation` folder to specificed `Project directory`
+6. To furhter process and quantify the extracted signal open Single-cell data analysis -pipeline (Plugins > LUMIN > Single-cell data analysis) and apply following settings thorugh GUI input fields:
+
+```Project directory: /Volumes/T9/Ca_data/exp_pharmacology/Analysis_new_env
+Analysis mode: Spontaneous activity
+Control condition: Control
+Normalization mode: Sliding window
+Sliding window size: 75
+Percentile threshold: 25
+Prominence threshold: 0.2
+Amplitude width ratio: 0.003
+Imaging interval: 0.2
+KCl stimulation frame: -1
+Clusters:6
+```
+
+7. Press `Test settings on random image` -button to sample random image from input. User can explore the baseline estimation and spike detection using line plots, or play the calcium video to visualize detected spikes overlaid with the video. User can adjust the peak detection settings and continue sampling random recordings until content with the results.
+
+8. Press `Run` -button to execute the Single-cell data analysis -pipeline. This will process all files indicated in the `Input file` and create a `Quantification` output folder specificed by `Project directory`.
 
 
-The scale of post-processing settings are determined based on maximum seen value * 2 (by default). To increase the scale you might need to sample another image.
-3. User can play around with the setting and continue sampling random image until satisfied with the results
-4. 
-6. 
-7.
-8.
-9. for segmentation post-processing
 
 ### Baseline shift analysis
 
@@ -144,6 +176,7 @@ conda create -n lumin_env python=3.10 cudatoolkit=11.2 cudnn=8.1.0 -c conda-forg
 
 
 tested with x64 windows 11 pro
+
 
 
 
