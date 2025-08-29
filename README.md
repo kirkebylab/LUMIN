@@ -2,21 +2,18 @@
 
 Lumin is a software that integrates GUI-based pipeline configuration with automated calcium imaging data analysis, containing steps for deep-learning ROI segmentation, signal extraction, ΔF/F normalization, and response quantification.
 
-This repository contains a guide how to get started with LUMIN and notebooks used to 
-
-## Documentation
-To be updated ... 
+This repository contains a guide on how to get started with LUMIN, as well as notebooks used to recreate figures for the manuscript with correct dimensions.
 
 
 ## Installation
-Lumin has been tested on a MacBook Pro with M2 chip and Windows 11 Pro x64 with NVIDIA GPU. Separate installation guides are available for macOS and Windows operating systems. It is recommended to install LUMIN into a conda environment. LUMIN requires a computer equipped with a GPU for efficient data processing. 
+Lumin has been tested on a MacBook Pro with M2 chip and Windows 11 Pro x64 with NVIDIA GPU. Separate installation guides are available for macOS and Windows operating systems. LUMIN requires a computer equipped with a GPU for efficient data processing. It is recommended to install LUMIN into a [conda](https://docs.conda.io/projects/conda/en/stable/user-guide/getting-started.html) environment, which can be used through Miniconda. 
 
-If Miniconda (or Anaconda) is not installed on the system, one can do so by following the instructions on [Miniconda installation page](https://www.anaconda.com/docs/getting-started/miniconda/install). 
+If Miniconda (or Anaconda) is not installed, one can do so by following the instructions on [Miniconda installation page](https://www.anaconda.com/docs/getting-started/miniconda/install). 
 
 
 #### macOS
 
-1. Open Terminal
+1. Open Terminal.
 
 2. Clone LUMIN GitHub repository:
 ```bash
@@ -49,7 +46,7 @@ python -m ipykernel install --user --name=lumin_env
 ```
 
 #### Windows
-1. Open Anaconda Prompt
+1. Open Anaconda Prompt.
 
 2. Clone LUMIN GitHub repository:
 ```bash
@@ -63,7 +60,7 @@ cd LUMIN
 
 4. Create conda environment:
 ```bash
-conda create -n lumin_env python=3.10 cudatoolkit=11.2 cudnn=8.1.0 -c conda-forge
+conda create -n lumin_env python=3.10 cudatoolkit=11.2 cudnn=8.1.0 -c conda-forge -y
 ```
 
 5. Activate conda environment:
@@ -81,7 +78,19 @@ pip install -e .
 python -m ipykernel install --user --name=lumin_env
 ```
 
-8. Enable developer mode in windows settings. This is done to avoid [error](https://github.com/stardist/stardist/issues/287) caused by StarDist python package. 
+8. Enable developer mode in windows settings. This is done to avoid an [error](https://github.com/stardist/stardist/issues/287) caused by StarDist python package.
+
+
+#### Linux
+Note, installation for Linux is not tested. It's anticipated that the GPU is detected if user follows these steps:
+
+1. Follow installation guide for macOS. 
+
+2. In active lumin_env run:
+```
+pip install tensorflow[and-cuda]
+```
+
 
 
 
@@ -92,14 +101,18 @@ Testing data can be loaded from this dropbox [link](https://www.dropbox.com/scl/
 
 Download it to `{local_path}/LUMIN` folder and unzip
 
-To run LUMIN with proper data, the user can use the provided `.csv` files as template to generate an input data file for LUMIN. The pipelines require the following columns to be present in the input file `plate_id`, `filename`, `filepath`, `biological_replicate`, and `stimulation`. User can provide any additional sample-associated metadata to the input data file (Note: `marker` column is reserved for the co-expression and shouldn't be specified in the input file). 
+To run LUMIN with proper data, the user can use the provided `.csv` files as template to generate an input data file for LUMIN. The pipelines require the following columns to be present in the input file `plate_id`, `filename`, `filepath`, `biological_replicate`, and `stimulation`. User can provide any additional sample-associated metadata to the input data file. 
 
 ## Example analysis workflow
 
 
-LUMIN is built around Napari and uses its data [layer](https://napari.org/dev/howtos/layers/image.html) widgets to display data during the parameter fine-tuning process. The calcium imaging data analysis happens through (1) Segmentation and signal extraction and (2) Single-cell data analysis pipelines, which can be configured using two custom-made Napari widgets. After the configuration fine-tuning process both pipelines process the data autonomously. To get started with LUMIN, here we provide an example pipeline configuration for two different analysis setups: (1) spontaneously active neurons (Transient activity analysis) and (2) quiescent stimulus-evoked neurons (Baseline shift analysis).
+LUMIN is built around Napari and uses its data [layer](https://napari.org/dev/howtos/layers/image.html) widgets to display data during the parameter fine-tuning process. 
+
+The calcium imaging data analysis happens through (1) Segmentation and signal extraction and (2) Single-cell data analysis pipelines, which can be configured using two custom-made Napari widgets. After the configuration fine-tuning process both pipelines process the data autonomously. To get started with LUMIN, here we provide an example pipeline configuration for two different analysis setups: (1) spontaneously active neurons (Transient activity analysis) and (2) quiescent stimulus-evoked neurons (Baseline shift analysis).
 
 The process of the pipeline execution can be followed from terminal window. The Napari window is unresponsible while the analysis is running.
+
+When using the testing data, LUMIN should be executed from {local_path}/LUMIN as the test input file do not contain absolute data paths. Lumin is launched from a Terminal (macOS) or Anaconda Prompt (windows) window.
 
 ### Transient activity analysis
 ####
@@ -223,6 +236,7 @@ Number of clusters: 3
 8. Press `Test settings on random image` -button to sample a random image from input. The user can explore the normalization and activity classification settings using line and swarm plots. The user can adjust the settings and continue sampling random recordings until content with the analysis setup (this process will not save any output).
 
 9. Press `Run` -button to execute the Single-cell data analysis pipeline. This will process all files indicated in the `Input file` and create a `Quantification` output folder specified by `Project directory`.
+
 
 
 
