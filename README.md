@@ -153,7 +153,7 @@ The scale of post-processing settings is determined based on the maximum value o
 
 5. The user can play around with the segmentation and post-processing settings and continue sampling random images until satisfied with the results (this process will not save any output).
 
-6. Press `Run` -button to execute the Segmentation and signal extraction pipeline. This will process all files indicated in the `Input file` and create a `Segmentation` folder in the specified `Project directory`.
+6. Press `Run` -button to execute the Segmentation and signal extraction pipeline. This will process all files indicated in the `Input file` and create a `Segmentation` folder in the specified `Project directory`. The output can be viewed using computers file system.
 
 Once the pipeline finishes, the user can move to the quantification step.
 
@@ -175,7 +175,7 @@ Number of clusters: 6
 
 8. Press `Test settings on random image` -button to sample a random image from input. The user can explore the baseline estimation and spike detection using line plots, or play the calcium video to visualize detected spikes overlaid with the video. The user can adjust the peak detection settings and continue sampling random recordings until content with the results (this process will not save any output).
 
-9. Press `Run` -button to execute the Single-cell data analysis pipeline. This will create a `quantification` folder in the specified `Project directory`
+9. Press `Run` -button to execute the Single-cell data analysis pipeline. This will create a `Quantification` folder in the specified `Project directory`. The output can be viewed using computers file system.
 
 
 
@@ -218,7 +218,7 @@ Fluorescence intensity: 350 - 10470
 The scale of post-processing settings is determined based on the maximum value of sampled images * 2 (by default). To increase the scale, you might need to sample another image. With the testing data, you might not be able to reach the values indicated above.
 
 5. The user can play around with the settings and continue sampling random images until satisfied with the results (this process will not save any output).
-6. Press `Run` -button to execute the Segmentation and signal extraction pipeline. This will process all files indicated in the `Input file` and create a `Segmentation` folder in the specified `Project directory`.
+6. Press `Run` -button to execute the Segmentation and signal extraction pipeline. This will process all files indicated in the `Input file` and create a `Segmentation` folder in the specified `Project directory`. The output can be viewed using computers file system.
 7. To further process and quantify the extracted signal, open Single-cell data analysis -pipeline (Plugins > LUMIN > Single-cell data analysis) and apply the following settings through GUI input fields:
 
 ```
@@ -238,7 +238,8 @@ Number of clusters: 3
 
 8. Press `Test settings on random image` -button to sample a random image from input. The user can explore the normalization and activity classification settings using line and swarm plots. The user can adjust the settings and continue sampling random recordings until content with the analysis setup (this process will not save any output).
 
-9. Press `Run` -button to execute the Single-cell data analysis pipeline. This will process all files indicated in the `Input file` and create a `Quantification` output folder specified by `Project directory`.
+9. Press `Run` -button to execute the Single-cell data analysis pipeline. This will process all files indicated in the `Input file` and create a `Quantification` output folder specified by `Project directory`. The output can be viewed using computers file system.
+
 
 
 
