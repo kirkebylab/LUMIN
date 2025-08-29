@@ -6,9 +6,9 @@ This repository contains a guide on how to get started with LUMIN, as well as no
 
 
 ## Installation
-Lumin has been tested on a MacBook Pro with M2 chip and Windows 11 Pro x64 with NVIDIA GPU. Separate installation guides are available for macOS and Windows operating systems. LUMIN requires a computer equipped with a GPU for efficient data processing. It is recommended to install LUMIN into a [conda](https://docs.conda.io/projects/conda/en/stable/user-guide/getting-started.html) environment, which can be used through Miniconda. 
+Lumin has been tested on a MacBook Pro with M2 chip and Windows 11 Pro x64 with NVIDIA GPU. Separate installation guides are available for macOS and Windows operating systems. LUMIN requires a computer equipped with a GPU for efficient data processing. It is recommended to install LUMIN into a [conda](https://docs.conda.io/projects/conda/en/stable/user-guide/getting-started.html) environment. This requires Miniconda or Anaconda to be installed.
 
-If Miniconda (or Anaconda) is not installed, one can do so by following the instructions on [Miniconda installation page](https://www.anaconda.com/docs/getting-started/miniconda/install). 
+If not installed, one can do so by following the instructions on [Miniconda installation page](https://www.anaconda.com/docs/getting-started/miniconda/install). 
 
 
 #### macOS
@@ -40,7 +40,7 @@ conda activate lumin_env
 pip install -e .
 ```
 
-7. Install Jupyter kernel (optional, enables downstream analysis or figure polishing of LUMIN-generated tabular output):
+7. Install Jupyter kernel (optional, enables custom downstream analysis or figure polishing of LUMIN-generated tabular output):
 ```bash
 python -m ipykernel install --user --name=lumin_env
 ```
@@ -73,12 +73,12 @@ conda activate lumin_env
 pip install -e .
 ```
 
-7. Install jupyter kernel (optional, enables downstream analysis or figure polishing of LUMIN-generated tabular output):
+7. Install jupyter kernel (optional, enables custom downstream analysis or figure polishing of LUMIN-generated tabular output):
 ```bash
 python -m ipykernel install --user --name=lumin_env
 ```
 
-8. Enable developer mode in windows settings. This is done to avoid an [error](https://github.com/stardist/stardist/issues/287) caused by StarDist python package.
+8. Enable developer mode in Windows settings. This is done to avoid an [error](https://github.com/stardist/stardist/issues/287) caused by StarDist python package.
 
 
 #### Linux
@@ -90,7 +90,10 @@ Note, installation for Linux is not tested. It's anticipated that the GPU is det
 ```
 pip install tensorflow[and-cuda]
 ```
-
+If this command returns non-empty list GPU is detected:
+```
+python -c "import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))"
+```
 
 
 
@@ -101,18 +104,18 @@ Testing data can be loaded from this dropbox [link](https://www.dropbox.com/scl/
 
 Download it to `{local_path}/LUMIN` folder and unzip
 
-To run LUMIN with proper data, the user can use the provided `.csv` files as template to generate an input data file for LUMIN. The pipelines require the following columns to be present in the input file `plate_id`, `filename`, `filepath`, `biological_replicate`, and `stimulation`. User can provide any additional sample-associated metadata to the input data file. 
+To run LUMIN with proper data, use the provided `.csv` files as template to generate an input data file for LUMIN. The pipelines require the following columns to be present in the input file `plate_id`, `filename`, `filepath`, `biological_replicate`, and `stimulation`. User can provide any additional sample-associated metadata to the input data file. 
 
 ## Example analysis workflow
 
 
 LUMIN is built around Napari and uses its data [layer](https://napari.org/dev/howtos/layers/image.html) widgets to display data during the parameter fine-tuning process. 
 
-The calcium imaging data analysis happens through (1) Segmentation and signal extraction and (2) Single-cell data analysis pipelines, which can be configured using two custom-made Napari widgets. After the configuration fine-tuning process both pipelines process the data autonomously. To get started with LUMIN, here we provide an example pipeline configuration for two different analysis setups: (1) spontaneously active neurons (Transient activity analysis) and (2) quiescent stimulus-evoked neurons (Baseline shift analysis).
+The calcium imaging data analysis happens through (1) Segmentation and signal extraction and (2) Single-cell data analysis pipelines, which can be configured using two custom-made Napari widgets. After the configuration fine-tuning process both pipelines process the data autonomously. To get started with LUMIN, we provide an example pipeline configuration for two different analysis setups: (1) spontaneously active neurons (Transient activity analysis) and (2) quiescent stimulus-evoked neurons (Baseline shift analysis).
 
 The process of the pipeline execution can be followed from terminal window. The Napari window is unresponsible while the analysis is running.
 
-When using the testing data, LUMIN should be executed from {local_path}/LUMIN as the test input file do not contain absolute data paths. Lumin is launched from a Terminal (macOS) or Anaconda Prompt (windows) window.
+When using the testing data, LUMIN should be executed from `{local_path}/LUMIN` because the test input file do not contain absolute data paths. Lumin is launched from a Terminal (macOS) or Anaconda Prompt (Windows) window.
 
 ### Transient activity analysis
 ####
@@ -126,10 +129,10 @@ conda activate lumin_env
 napari
 ```
 
-3. Select Segmentation and signal extraction -pipeline (Plugins > LUMIN > Segmentation and signal extraction) and apply the following settings through the GUI input fields:
+3. Select Segmentation and signal extraction -pipeline (Plugins > LUMIN > Segmentation and signal extraction) and apply the following settings using the GUI input fields:
 ```
 Input file: {Select ca_spontanoeus_input_data.csv from test_data folder}
-Project directory: {Select project folder, for instance, generate Output/Spontaneous_project to LUMIN folder}
+Project directory: {Select project folder, for instance, generate Output/Spontaneous_project inside LUMIN folder}
 ROI segmentation mode: Automated
 Nuclear stain: None
 Stain to segment: Cytoplasmic (Cellpose)
@@ -150,7 +153,7 @@ The scale of post-processing settings is determined based on the maximum value o
 
 5. The user can play around with the segmentation and post-processing settings and continue sampling random images until satisfied with the results (this process will not save any output).
 
-6. Press `Run` -button to execute the Segmentation and signal extraction pipeline. This will process all files indicated in the `Input file` and create a `Segmentation` folder in the specified `Project directory`
+6. Press `Run` -button to execute the Segmentation and signal extraction pipeline. This will process all files indicated in the `Input file` and create a `Segmentation` folder in the specified `Project directory`.
 
 Once the pipeline finishes, the user can move to the quantification step.
 
@@ -236,6 +239,7 @@ Number of clusters: 3
 8. Press `Test settings on random image` -button to sample a random image from input. The user can explore the normalization and activity classification settings using line and swarm plots. The user can adjust the settings and continue sampling random recordings until content with the analysis setup (this process will not save any output).
 
 9. Press `Run` -button to execute the Single-cell data analysis pipeline. This will process all files indicated in the `Input file` and create a `Quantification` output folder specified by `Project directory`.
+
 
 
 
