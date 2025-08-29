@@ -1,8 +1,8 @@
 # LUMIN (Live-cell User Module for Imaging and analysis of Neuronal activity)
 
-Lumin is a ....
+Lumin is a software that integrates GUI-based pipeline configuration with automated calcium imaging data analysis, containing steps for deep-learning ROI segmentation, signal extraction, ΔF/F normalization, and response quantification.
 
-This repository contains ....
+This repository contains a guide how to get started with LUMIN and notebooks used to 
 
 ## Documentation
 To be updated ... 
@@ -15,7 +15,10 @@ If Miniconda (or Anaconda) is not installed on the system, one can do so by foll
 
 
 #### macOS
-1. Clone LUMIN GitHub repository:
+
+1. Open Terminal
+
+2. Clone LUMIN GitHub repository:
 ```bash
 git clone https://github.com/kirkebylab/LUMIN.git
 ```
@@ -25,28 +28,30 @@ git clone https://github.com/kirkebylab/LUMIN.git
 cd LUMIN
 ```
 
-5. Create conda environment:
+4. Create conda environment:
 ```bash
 conda create -n lumin_env python=3.10 -c conda-forge -y
 ```
 
-6. Activate conda environment:
+5. Activate conda environment:
 ```bash
 conda activate lumin_env
 ```
 
-7. Install LUMIN in the conda environment:
+6. Install LUMIN in the conda environment:
 ```bash
 pip install -e .
 ```
 
-8. Install Jupyter kernel (optional, enables downstream analysis or figure polishing of LUMIN-generated tabular output):
+7. Install Jupyter kernel (optional, enables downstream analysis or figure polishing of LUMIN-generated tabular output):
 ```bash
 python -m ipykernel install --user --name=lumin_env
 ```
 
 #### Windows
-1. Clone LUMIN GitHub repository:
+1. Open Anaconda Prompt
+
+2. Clone LUMIN GitHub repository:
 ```bash
 git clone https://github.com/kirkebylab/LUMIN.git
 ```
@@ -56,52 +61,59 @@ git clone https://github.com/kirkebylab/LUMIN.git
 cd LUMIN
 ```
 
-5. Create conda environment:
+4. Create conda environment:
 ```bash
 conda create -n lumin_env python=3.10 cudatoolkit=11.2 cudnn=8.1.0 -c conda-forge
 ```
 
-6. Activate conda environment:
+5. Activate conda environment:
 ```bash
 conda activate lumin_env
 ```
 
-7. Install LUMIN in the conda environment:
+6. Install LUMIN in the conda environment:
 ```bash
 pip install -e .
 ```
 
-8. Install jupyter kernel (optional, enables downstream analysis or figure polishing of LUMIN-generated tabular output):
+7. Install jupyter kernel (optional, enables downstream analysis or figure polishing of LUMIN-generated tabular output):
 ```bash
-python -m ipykernel install --user --name=ca_env
+python -m ipykernel install --user --name=lumin_env
 ```
 
-9. Enable developer mode in windows settings. This is done to avoid [error](https://github.com/stardist/stardist/issues/287) caused by StarDist python package. 
+8. Enable developer mode in windows settings. This is done to avoid [error](https://github.com/stardist/stardist/issues/287) caused by StarDist python package. 
 
 
 
 ## Data loading
-We provide a small dataset to test the pipeline. It's a subset of data used in the manuscript.
+A small dataset is provided to test the pipeline. It's a subset of data used in the manuscript.
 
 Testing data can be loaded from this dropbox [link](https://www.dropbox.com/scl/fo/z1gg916e09zk5gmb6yrqn/ALrZjemEdyoNE28Tss1efxs?rlkey=1ljkizlzhdwxpeoqggp40zqpm&dl=0).
 
 Download it to `{local_path}/LUMIN` folder and unzip
 
-To run LUMIN with proper data, user can use the provided .csv files as templates to generate input input data file for LUMIN. The pipelines requires the following columns to be present in the input `plate_id`, `filename`, `filepath`, `biological_replicate` and `stimulation`. User can provide any additional sample associated metadata to the input data file (Note `marker` column is reserved for the co-expression and shouldn't be used in input file). 
+To run LUMIN with proper data, the user can use the provided `.csv` files as template to generate an input data file for LUMIN. The pipelines require the following columns to be present in the input file `plate_id`, `filename`, `filepath`, `biological_replicate`, and `stimulation`. User can provide any additional sample-associated metadata to the input data file (Note: `marker` column is reserved for the co-expression and shouldn't be specified in the input file). 
 
 ## Example analysis workflow
 
 
-LUMIN is built around Napari and uses its data [layers](https://napari.org/dev/howtos/layers/image.html) widgets to display data during parameter fine-tuning process. The calcium imaging data analysis happens through Segmentation and signal extraction and Single-cell data analysis pipelines, which can be configured using custom made Napari widgets. To get started with LUMIN here we provide an example pipeline configuration for two different analysis setups: (1) spontanoeusly active neurons (Transient activity analysis) and (2) quiescent stimulus evoked neurons (Baseline shift analysis).
+LUMIN is built around Napari and uses its data [layer](https://napari.org/dev/howtos/layers/image.html) widgets to display data during the parameter fine-tuning process. The calcium imaging data analysis happens through (1) Segmentation and signal extraction and (2) Single-cell data analysis pipelines, which can be configured using two custom-made Napari widgets. After the configuration fine-tuning process both pipelines process the data autonomously. To get started with LUMIN, here we provide an example pipeline configuration for two different analysis setups: (1) spontaneously active neurons (Transient activity analysis) and (2) quiescent stimulus-evoked neurons (Baseline shift analysis).
+
+The process of the pipeline execution can be followed from terminal window. The Napari window is unresponsible while the analysis is running.
 
 ### Transient activity analysis
 ####
-1. Launch napari:
+1. Activate conda environment (if not active):
+```bash
+conda activate lumin_env
+```
+
+2. Launch napari window (if not open):
 ```bash
 napari
 ```
 
-1. Select Segmentation and signal extraction -pipeline (Plugins > LUMIN > Segmentation and signal extraction) and apply the following settings through the GUI input fields:
+3. Select Segmentation and signal extraction -pipeline (Plugins > LUMIN > Segmentation and signal extraction) and apply the following settings through the GUI input fields:
 ```
 Input file: {Select ca_spontanoeus_input_data.csv from test_data folder}
 Project directory: {Select project folder, for instance, generate Output/Spontaneous_project to LUMIN folder}
@@ -114,19 +126,20 @@ Cell probability threshold: 0.0
 Flow threshold: 0.4
 ```
 
-3. Press `Test settings on random image` -button to sample a random image from the input. Once the image appears in the canvas, apply the following post-processing settings and evaluate the outcome of the configured settings:
+4. Press `Test settings on random image` -button to sample a random image from the input. Once the image appears in the canvas, apply the following post-processing settings and evaluate the outcome of the parameter configuration:
 
 ```
 Cell area: 350 - 5600
-Calcium intensity: 350 - 8000
+Fluorescence intensity: 350 - 8000
 ```
 
-The scale of post-processing settings is determined based on the maximum value of sampled images * 2 (by default). To increase the scale, you might need to sample another image.
+The scale of post-processing settings is determined based on the maximum value of sampled images * 2 (by default). To increase the scale, you might need to sample another image. With the testing data, you might not be able to reach the values indicated above.
 
-4. The user can play around with the segmentation and post-processing settings and continue sampling random images until satisfied with the results. (This process will not save any output.)
-5. Press `Run` -button to execute the Segmentation and signal extraction pipeline. This will process all files indicated in the `Input file` and create a `Segmentation` folder in the specified `Project directory`
+5. The user can play around with the segmentation and post-processing settings and continue sampling random images until satisfied with the results (this process will not save any output).
 
-The pipeline process can be followed from the terminal. Once the pipeline finishes, the user can move to the quantification step.
+6. Press `Run` -button to execute the Segmentation and signal extraction pipeline. This will process all files indicated in the `Input file` and create a `Segmentation` folder in the specified `Project directory`
+
+Once the pipeline finishes, the user can move to the quantification step.
 
 7. To further process and quantify the extracted signal, open Single-cell data analysis -pipeline (Plugins > LUMIN > Single-cell data analysis) and apply the following settings through GUI input fields:
 
@@ -144,20 +157,25 @@ KCl stimulation frame: -1
 Number of clusters: 6
 ```
 
-7. Press `Test settings on random image` -button to sample a random image from input. The user can explore the baseline estimation and spike detection using line plots, or play the calcium video to visualize detected spikes overlaid with the video. The user can adjust the peak detection settings and continue sampling random recordings until content with the results.
+8. Press `Test settings on random image` -button to sample a random image from input. The user can explore the baseline estimation and spike detection using line plots, or play the calcium video to visualize detected spikes overlaid with the video. The user can adjust the peak detection settings and continue sampling random recordings until content with the results (this process will not save any output).
 
-8. Press `Run` -button to execute the Single-cell data analysis pipeline. This will process all files indicated in the `Input file` and create a `Quantification` output folder specified in `Project directory`.
+9. Press `Run` -button to execute the Single-cell data analysis pipeline. This will create a `quantification` folder in the specified `Project directory`
 
 
 
 ### Baseline shift analysis
-1. Launch napari (if not open):
+1. Activate conda environment (if not active):
+```bash
+conda activate lumin_env
+```
+
+2. Launch napari window (if not open):
 ```bash
 napari
 ```
 
 
-1. Select Segmentation and signal extraction -pipeline (Plugins > LUMIN > Segmentation and signal extraction) and apply the following settings through the GUI input fields:
+3. Select Segmentation and signal extraction pipeline (Plugins > LUMIN > Segmentation and signal extraction) and apply the following settings through the GUI input fields:
 ```
 Input file: {Select ca_evoked_input_data.csv from test_data folder}
 Project directory: {Select project folder, for instance, generate Output/Evoked_project to LUMIN folder}
@@ -172,20 +190,20 @@ Cell probability threshold: 0.0
 Flow threshold: 3.0
 ```
 
-3. Press `Test settings on random image` -button to sample a random image from the input. Once the image appears in the canvas, apply the following post-processing settings and evaluate the outcome of the configured settings:
+4. Press `Test settings on random image` -button to sample a random image from the input. Once the image appears in the canvas, apply the following post-processing settings and evaluate the outcome of the configured settings:
 
 ```
-Filtering - Nuclear overlap: 0.7
-Filtering - Nuclear area: 30 - 3442
-Filtering - Cell area: 350 - 6554
-Filtering - Calcium intensity: 350 - 10470
+Nuclear overlap: 0.7
+Nuclear area: 30 - 3442
+Cell area: 350 - 6554
+Fluorescence intensity: 350 - 10470
 ```
 
-The scale of post-processing settings is determined based on the maximum value of sampled images * 2 (by default). To increase the scale, you might need to sample another image. With the testing data, you might not be able to reach the values used in the manuscript.
+The scale of post-processing settings is determined based on the maximum value of sampled images * 2 (by default). To increase the scale, you might need to sample another image. With the testing data, you might not be able to reach the values indicated above.
 
-4. The user can play around with the settings and continue sampling random images until satisfied with the results. (This process will not save any output.)
-5. Press `Run` -button to execute the Segmentation and signal extraction pipeline. This will process all files indicated in the `Input file` and create a `Segmentation` folder in the specified `Project directory`
-6. To further process and quantify the extracted signal, open Single-cell data analysis -pipeline (Plugins > LUMIN > Single-cell data analysis) and apply the following settings through GUI input fields:
+5. The user can play around with the settings and continue sampling random images until satisfied with the results (this process will not save any output).
+6. Press `Run` -button to execute the Segmentation and signal extraction pipeline. This will process all files indicated in the `Input file` and create a `Segmentation` folder in the specified `Project directory`.
+7. To further process and quantify the extracted signal, open Single-cell data analysis -pipeline (Plugins > LUMIN > Single-cell data analysis) and apply the following settings through GUI input fields:
 
 ```
 Project directory: {Select same project directory ({local_path}/Evoked_project) than in Segmentation and signal extraction -pipeline}
@@ -202,9 +220,10 @@ KCl stimulation frame: 100
 Number of clusters: 3
 ```
 
-7. Press `Test settings on random image` -button to sample a random image from input. The user can explore the normalization and analysis settings using line plots and activity classification using swarm plots. The user can adjust the settings and continue sampling random recordings until content with the analysis setup.
+8. Press `Test settings on random image` -button to sample a random image from input. The user can explore the normalization and activity classification settings using line and swarm plots. The user can adjust the settings and continue sampling random recordings until content with the analysis setup (this process will not save any output).
 
-8. Press `Run` -button to execute the Single-cell data analysis pipeline. This will process all files indicated in the `Input file` and create a `Quantification` output folder specified by `Project directory`.
+9. Press `Run` -button to execute the Single-cell data analysis pipeline. This will process all files indicated in the `Input file` and create a `Quantification` output folder specified by `Project directory`.
+
 
 
 
