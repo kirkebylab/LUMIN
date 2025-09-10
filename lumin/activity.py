@@ -21,8 +21,8 @@ def spike(cell_properties_df: pd.DataFrame = None, prominence: float = None, amp
   
 
         window_trace = trace[start_frame:end_frame]
-        print('trace length spike calling:', len(window_trace))
-        print(start_frame, end_frame)
+        #print('trace length spike calling:', len(window_trace))
+        #print(start_frame, end_frame)
 
         peak_location, peak_properties = find_peaks(trace, prominence = prominence, width=0, height=0)
         peak_properties.update({'peak_location':peak_location})

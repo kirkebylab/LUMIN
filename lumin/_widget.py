@@ -72,7 +72,8 @@ def disable_placeholder(widget):
     combo_box = widget.native
     if isinstance(combo_box, QComboBox):
         combo_box.model().item(0).setEnabled(False)
-    
+
+
 
 def segmentation_widget():
 
@@ -86,39 +87,39 @@ def segmentation_widget():
     # Widget layout
     @magicgui(
         layout='vertical',
-        input_file=dict(widget_type='FileEdit', label='Input file:',value='/Users/bns631/Library/CloudStorage/OneDrive-UniversityofCopenhagen/Ca_imaging/Ca_nuclear_segmentation_test_data/Stimulation' , tooltip='Specify input image stack directory path'),
-        project_dir=dict(widget_type='FileEdit',value='', label='Project directory:', mode='d', tooltip='Specify project directory for pipeline output'),
+        input_file=dict(widget_type='FileEdit', label='Input file:',value='' , tooltip='Specify image stack metadata file.'),
+        project_dir=dict(widget_type='FileEdit',value='', label='Project directory:', mode='d', tooltip='Specify project directory for pipeline output.'),
         seg_label=dict(widget_type='Label', label='<div style="text-align: center; display: block; width: 100%;"><b>———Segmentation settings———</b></div>'),
-        selection_mode = dict(widget_type='ComboBox',name = 'selection_mode', label='ROI segmentation mode', value='-- Select --', choices=['-- Select --','Automated', 'Manual selection'],  tooltip='Automated or manual ROI selection'),
+        selection_mode = dict(widget_type='ComboBox',name = 'selection_mode', label='ROI segmentation mode', value='-- Select --', choices=['-- Select --','Automated', 'Manual selection'],  tooltip='Specify segmentation method.'),
 
         # nuclear channel first channel of image
-        nuclear_stain = dict(widget_type='ComboBox',name='nuclear_stain',  label='Nuclear stain', value='-- Select --', choices=['-- Select --', 'First frame', 'None'],  tooltip='Specify whether the stack contains nuclear stain as first frame'),
-        stain_to_segment = dict(widget_type='ComboBox',name = 'stain_to_segment', label='Stain to segment',value='-- Select --', choices=['-- Select --', 'Nuclear (StarDist)', 'Cytoplasmic (Cellpose)', 'Nuclear (StarDist) and cytoplasmic (Cellpose)'],  tooltip='Segmentation method approach to create mask'),
+        nuclear_stain = dict(widget_type='ComboBox',name='nuclear_stain',  label='Nuclear stain', value='-- Select --', choices=['-- Select --', 'First frame', 'None'],  tooltip='Specify whether the stack contains nuclear stain as first frame.'),
+        stain_to_segment = dict(widget_type='ComboBox',name = 'stain_to_segment', label='Stain to segment',value='-- Select --', choices=['-- Select --', 'Nuclear (StarDist)', 'Cytoplasmic (Cellpose)', 'Nuclear (StarDist) and cytoplasmic (Cellpose)'],  tooltip='Segmentation approach to create ROI mask.'),
 
         # Stardist settings
         label_sd=dict(widget_type='Label', label='<div style="text-align: center; display: block; width: 100%;">StarDist parameters</div>'),
-        prob_thresh_sd = dict(widget_type="FloatSpinBox",label="Probability/Score Threshold",min=0.0,max=1.0,step=0.05,value=0.48),
-        overlap_thresh_sd = dict(widget_type="FloatSpinBox",label="Overlap threshold",min=0.0,max=1.0,step=0.05,value=0.3),
+        prob_thresh_sd = dict(widget_type="FloatSpinBox",label="Probability/Score Threshold",min=0.0,max=1.0,step=0.05,value=0.48, tooltip='Higher values lead to fewer segmented objects.'),
+        overlap_thresh_sd = dict(widget_type="FloatSpinBox",label="Overlap threshold",min=0.0,max=1.0,step=0.05,value=0.3, tooltip='Higher values allow segmented objects to overlap substantially.'),
 
         # Cellpose settings
         label_cp=dict(widget_type='Label', label='<div style="text-align: center; display: block; width: 100%;">Cellpose parameters</div>'),
-        model_cp = dict(widget_type='ComboBox',name='model_cp', label='Model',value = '-- Select --',  choices=[*CP_models],  tooltip='there is a <em>cyto</em> model, a new <em>cyto2</em> model from user submissions, and a <em>nuclei</em> model'),
-        diameter_cp = dict(widget_type='SpinBox', name='diameter_cp',label='Diameter', value=30, min=0, max=100,step=5, tooltip='Approximate diameter of cells to be segmented'),
-        cellprob_threshold_cp = dict(widget_type='FloatSpinBox', name='cellprob_threshold_cp',label='Cell probability threshold', value=0.0, min=-8.0, max=8.0, step=0.5, tooltip='cell probability threshold (set lower to get more cells and larger cells)'),
-        flow_threshold_cp = dict(widget_type='FloatSpinBox', name='flow_threshold_cp',label='Flow threshold', value=0.4, min=0.0, max=5.0, step=0.2, tooltip='threshold on gradient match to accept a mask (set higher to get more cells, or to zero to turn off)'),
+        model_cp = dict(widget_type='ComboBox',name='model_cp', label='Model',value = '-- Select --',  choices=[*CP_models],  tooltip='Specify Cellpose model for segmentation.'),
+        diameter_cp = dict(widget_type='SpinBox', name='diameter_cp',label='Diameter', value=30, min=0, max=100,step=5, tooltip='Approximate diameter of cells in pixels to be segmented.'),
+        cellprob_threshold_cp = dict(widget_type='FloatSpinBox', name='cellprob_threshold_cp',label='Cell probability threshold', value=0.0, min=-8.0, max=8.0, step=0.5, tooltip='Cell probability threshold (set lower to get more cells and larger cells).'),
+        flow_threshold_cp = dict(widget_type='FloatSpinBox', name='flow_threshold_cp',label='Flow threshold', value=0.4, min=0.0, max=5.0, step=0.2, tooltip='Threshold on maximum allowed error (set higher to get more cells, or to zero to turn off).'),
 
         # Manual segmentation settings
-        co_stain = dict(widget_type='ComboBox',name='co_stain',  label='Co-stain', value='-- Select --', choices=['-- Select --', True, False],  tooltip='Specify whether the stack contains nuclear stain as first frame'),
-        marker_name = dict(widget_type='LineEdit',name = 'marker_name', label='Marker', value='',  tooltip=''),
-        annotation_point_size = dict(widget_type='IntSlider', name='annotation_point_size',label='Point size', value=20, min=0, max=70, step=1, tooltip='Point size for manual annotation'),
-        optimize_button  = dict(widget_type='PushButton', text='Test settings on random image', tooltip='Run segmentation to optimize settings for segmentation and mask filtering', enabled=False),
+        co_stain = dict(widget_type='ComboBox',name='co_stain',  label='Co-stain', value='-- Select --', choices=['-- Select --', True, False],  tooltip='Specify whether annotating immunolabelled cells.'),
+        marker_name = dict(widget_type='LineEdit',name = 'marker_name', label='Marker', value='',  tooltip='Cell population name to be annotated.'),
+        annotation_point_size = dict(widget_type='IntSlider', name='annotation_point_size',label='Point size', value=20, min=0, max=70, step=1, tooltip='Point size for manual annotation.'),
+        optimize_button  = dict(widget_type='PushButton', text='Test settings on random image', tooltip='Samples a random recording from input to test segmentation parameters.', enabled=False),
         
         # Post-filtering settings
-        nuclear_overlap = dict(widget_type='FloatSlider', name='nuclear_overlap',label='Nuclear overlap', value = (0), min=0, max=1, step=0.01, tooltip=''),
-        nuclear_area = dict(widget_type='RangeSlider', name='nuclear_area',label='Nuclear area', value = (0,1), min=0, max=1, step=1, tooltip=''),
-        cell_area = dict(widget_type='RangeSlider', name='cell_area',label='Cell area', value = (0,1), min=0, max=1, step=1, tooltip=''),
-        ca_intensity = dict(widget_type='RangeSlider', name='ca_intensity',label='Fluorescence intensity', value = (0,1), min=0, max=1, step=1, tooltip=''),
-        filters_checkbox = dict(widget_type='CheckBox', name='filters_checkbox',label='Apply filters', value = True,  tooltip=''),
+        nuclear_overlap = dict(widget_type='FloatSlider', name='nuclear_overlap',label='Nuclear overlap', value = 0, min=0, max=1, step=0.01, tooltip='Minimum fraction of nuclear mask overlapping with cytoplasmic mask.'),
+        nuclear_area = dict(widget_type='RangeSlider', name='nuclear_area',label='Nuclear area', value = (0,1), min=0, max=1, step=1, tooltip='Range of nuclear mask size in pixels.'),
+        cell_area = dict(widget_type='RangeSlider', name='cell_area',label='Cell area', value = (0,1), min=0, max=1, step=1, tooltip='Range of cytoplasmic mask size in pixels.'),
+        ca_intensity = dict(widget_type='RangeSlider', name='ca_intensity',label='Fluorescence intensity', value = (0,1), min=0, max=1, step=1, tooltip='Average raw pixel intensity across the ROI.'),
+        filters_checkbox = dict(widget_type='CheckBox', name='filters_checkbox',label='Apply filters', value = True,  tooltip='Test impact with and without the filters (the checkbox is only for visualization purposes. Values from sliders are applied when running the pipeline).'),
 
     )
 
@@ -498,6 +499,27 @@ def segmentation_widget():
             traceback.print_exc()
         
         widget.call_button.enabled = True
+        # Reset settings
+        widget.input_file.value = ''
+        widget.project_dir.value = ''
+        widget.selection_mode.value = '-- Select --'
+        widget.nuclear_stain.value = '-- Select --'
+        widget.stain_to_segment.value = '-- Select --'
+        widget.prob_thresh_sd.value = 0.48
+        widget.overlap_thresh_sd.value = 0.3
+        widget.model_cp.value = '-- Select --'
+        widget.diameter_cp.value = 30
+        widget.cellprob_threshold_cp.value = 0.0
+        widget.flow_threshold_cp.value = 0.4
+        widget.co_stain.value = '-- Select --'
+        widget.marker_name.value = ''
+        widget.annotation_point_size.value = 20
+        widget.nuclear_overlap.value = 0
+        widget.nuclear_area.value = (0,1)
+        widget.cell_area.value = (0,1)
+        widget.ca_intensity.value = (0,1)
+        widget.filters_checkbox.value = True
+
 
 
         
@@ -1068,6 +1090,23 @@ def get_cell_properties_df(project_dir):
     
 
 
+# Reset settings
+def reset_settings_sc_analysis(widget):
+    # project_dir analysis_mode activity_type control_condition 
+    widget.stimulation_frame.value = 0
+    widget.kcl_frame.value = -1
+    widget.sliding_window_size.value = 75
+    widget.percentile_threshold.value = 15
+    widget.spike_prominence_threshold.value = 0
+    widget.spike_amplitude_width_ratio.value = 0
+    widget.analysis_window_start.value = 0
+    widget.analysis_window_end.value = 0
+    widget.baseline_std_threshold.value = 0
+    widget.imaging_interval.value = 0
+    widget.n_clusters.value = 5
+
+
+
 
 # ANALYSIS
 def single_cell_widget():
@@ -1078,33 +1117,26 @@ def single_cell_widget():
 
     @magicgui(
         layout='vertical',
-        project_dir=dict(widget_type='FileEdit',value='/Volumes/T9/Ca_data/exp_pharmacology/', label='Project directory:', mode='d', tooltip='Specify project directory for pipeline output'),
-        analysis_mode = dict(widget_type='ComboBox',name = 'analysis_mode', label='Analysis mode', value='-- Select --', choices=['-- Select --','Compound-evoked activity', 'Spontaneous activity'],  tooltip=''),
-        activity_type = dict(widget_type='ComboBox',name = 'activity_type', label='Activity type', value='-- Select --', choices=['-- Select --','Spontaneous', 'Baseline change'],  tooltip=''),
-        control_condition = dict(widget_type='LineEdit',name = 'control_condition', label='Control condition', value='',  tooltip=''),
-
-        #control_condition = dict(widget_type='ComboBox',name = 'control_condition', label='Control condition', value='-- Select --', choices=['-- Select --'],  tooltip=''),
-        #analysis_setup = dict(widget_type='ComboBox',name = 'analysis_setup', label='Analysis setup', value='-- Select --', choices=['-- Select --'],  tooltip=''),
+        project_dir=dict(widget_type='FileEdit',value='', label='Project directory:', mode='d', tooltip='Specify project directory for pipeline output'),
+        analysis_mode = dict(widget_type='ComboBox', name = 'analysis_mode', label='Analysis mode', value='-- Select --', choices=['-- Select --','Compound-evoked activity', 'Spontaneous activity'],  tooltip='Experimental type.'),
+        activity_type = dict(widget_type='ComboBox', name = 'activity_type', label='Activity type', value='-- Select --', choices=['-- Select --','Spontaneous', 'Baseline change'],  tooltip='Type of anticipated cellular activity.'),
+        control_condition = dict(widget_type='LineEdit',name = 'control_condition', label='Control condition', value='',  tooltip='Name of stimulation to be used as control'),
         norm_label=dict(widget_type='Label', label='<div style="text-align: center; display: block; width: 100%;"><b>———Normalization settings———</b></div>'),
-        normalization_mode = dict(widget_type='ComboBox',name = 'normalization_mode', label='Normalization', value='-- Select --', choices=['-- Select --','Sliding window', 'Pre-stimulus window'],  tooltip=''),
-        stimulation_frame = dict(widget_type="SpinBox",label="Stimulation frame",value=0, step = 1),
-        kcl_frame = dict(widget_type="SpinBox",label="KCl stimulation frame",value=-1, step=1), # make dynamic
-        sliding_window_size = dict(widget_type="SpinBox",label="Sliding window size",value=75, step=1, min=1, tooltip=''), # make dynamic
-        percentile_threshold = dict(widget_type='IntSlider', name='percentile_threshold',label='Percentile threshold', value=15, min=1, max=50, step=1, tooltip=''),
-        #sliding_window_size = dict(widget_type='SpinBox', name='sliding_window_size',label='Trace divisor', value=0, step=1),
-        #percentile_threshold = dict(widget_type='SpinBox', name='percentile_threshold',label='Percentile threshold', value=0,min=0, max=100, step=1),
+        normalization_mode = dict(widget_type='ComboBox',name = 'normalization_mode', label='Normalization', value='-- Select --', choices=['-- Select --','Sliding window', 'Pre-stimulus window'],  tooltip='Normalization method (use pre-stimulus window only when recording contains a stable baseline signal).'),
+        stimulation_frame = dict(widget_type="SpinBox",label="Stimulation frame",value=0, step = 1, tooltip='Image frame for stimulation administration.'),
+        kcl_frame = dict(widget_type="SpinBox",label="KCl stimulation frame",value=-1, step=1, tooltip='Image frame for KCl administration. If no KCl was added specify -1.'), # make dynamic
+        sliding_window_size = dict(widget_type="SpinBox",label="Sliding window size",value=75, step=1, min=1, tooltip='Sliding window size in frames'), # make dynamic
+        percentile_threshold = dict(widget_type='IntSlider', name='percentile_threshold',label='Percentile threshold', value=15, min=1, max=50, step=1, tooltip='Percentile of fluorescence values classified as baseline. Increase the percentile threshold for low activity recordings.'),
         spike_label=dict(widget_type='Label', label='<div style="text-align: center; display: block; width: 100%;"><b>———Trace quantification———</b></div>'),
-        spike_prominence_threshold = dict(widget_type='FloatSpinBox', name='spike_prominence_threshold',label='Prominence threshold', value=0, step=0.01),
-        spike_amplitude_width_ratio = dict(widget_type='FloatSpinBox', name='spike_amplitude_width_ratio',label='Amplitude width ratio', value=0, step=0.005),
-        analysis_window_start=dict(widget_type='SpinBox', label='Analysis window start', value=0),
-        analysis_window_end=dict(widget_type='SpinBox', label='Analysis window end', value=0),
-        #kcl_frame=dict(widget_type='SpinBox', label='KCl frame', value=None),
-        baseline_std_threshold = dict(widget_type='SpinBox', name='baseline_std_threshold',label='Standard deviation threshold', value=0, step=0.1),
-        imaging_interval=dict(widget_type='FloatSpinBox', label='Imaging interval', value=0, step=0.1),
+        spike_prominence_threshold = dict(widget_type='FloatSpinBox', name='spike_prominence_threshold',label='Prominence', value=0, step=0.01, tooltip = 'Threshold to identify peaks based on how much local maximum stand out from the surrounding baseline.'),
+        spike_amplitude_width_ratio = dict(widget_type='FloatSpinBox', name='spike_amplitude_width_ratio',label='Amplitude width ratio', value=0, step=0.005, tooltip = 'Parameter to exclude high width low amplitude peaks (If value is 0 nothing is excluded).'),
+        analysis_window_start=dict(widget_type='SpinBox', label='Analysis window start', value=0, tooltip = 'Specify analysis window start frame.'),
+        analysis_window_end=dict(widget_type='SpinBox', label='Analysis window end', value=0, tooltip = 'Specify analysis window end frame.'),
+        baseline_std_threshold = dict(widget_type='SpinBox', name='baseline_std_threshold',label='Standard deviation threshold', value=0, step=0.1, tooltip = 'Specify how many standard deviations AUC of a cell needs to exceed the mean AUC of the control to be classified as repsonding.'),
+        imaging_interval=dict(widget_type='FloatSpinBox', label='Imaging interval (s)', value=0, step=0.1, tooltip = 'Imaging interval in seconds.'),
         downstream_label=dict(widget_type='Label', label='<div style="text-align: center; display: block; width: 100%;"><b>———Downstream analysis———</b></div>'),
-        n_clusters = dict(widget_type='IntSlider', name='n_clusters',label='Number of clusters', value=5, min=1, max=10, step=1, tooltip=''),
-
-        optimize_button  = dict(widget_type='PushButton', text='Test settings on random image', tooltip='Run', enabled=True),
+        n_clusters = dict(widget_type='IntSlider', name='n_clusters',label='Number of clusters', value=5, min=1, max=10, step=1, tooltip='Number of clusters for k-means clustering.'),
+        optimize_button  = dict(widget_type='PushButton', text='Test settings on random recording', tooltip='Samples a random recording from input to test quantification parameters.', enabled=True),
 
     )
 
@@ -1156,8 +1188,6 @@ def single_cell_widget():
                 imaging_interval = widget.imaging_interval.value
                 n_clusters = widget.n_clusters.value
 
-
-                
                 plt.close()
                 plt.clf()
 
@@ -1169,9 +1199,6 @@ def single_cell_widget():
                 
                 if not imaging_interval > 0:
                     raise ValueError(f"Imaging interval needs to be above 0")
-
-                
-
 
                 for col in cell_properties_df.select_dtypes(include='category').columns:
                     cell_properties_df[col] = cell_properties_df[col].cat.remove_unused_categories()
@@ -1614,7 +1641,15 @@ def single_cell_widget():
             traceback.print_exc()
 
         widget.call_button.enabled = True
-        
+        widget.project_dir.value = ''
+        widget.analysis_mode.value = '-- Select --'
+        widget.activity_type.value = '-- Select --'
+        widget.control_condition.value = ''
+        widget.normalization_mode.value = '-- Select --'
+        reset_settings_sc_analysis(widget)
+        # project_dir analysis_mode activity_type control_condition normalization_mode
+
+
 
     # Hiding widgets
     widget.stimulation_frame.visible = False
@@ -1645,6 +1680,7 @@ def single_cell_widget():
         widget.spike_label.visible = True
         widget.normalization_mode.value = '-- Select --'
         widget.activity_type.value = '-- Select --'
+        reset_settings_sc_analysis(widget)
         disable_enable_value(widget.analysis_mode, 'disable', '-- Select --')
         disable_enable_value(widget.normalization_mode, 'enable', '-- Select --')
         disable_enable_value(widget.normalization_mode, 'enable','Sliding window')
@@ -1678,6 +1714,7 @@ def single_cell_widget():
     def _activity_mode_connect():
         disable_enable_value(widget.activity_type, 'disable', '-- Select --')
         widget.normalization_mode.value = '-- Select --'
+        reset_settings_sc_analysis(widget)
         disable_enable_value(widget.normalization_mode, 'enable', '-- Select --')
         widget.sliding_window_size.visible = False
         widget.percentile_threshold.visible = False
@@ -1726,6 +1763,9 @@ def single_cell_widget():
             widget.sliding_window_size.visible = False
             widget.percentile_threshold.visible = False
             widget.stimulation_frame.visible = True
+
+        reset_settings_sc_analysis(widget)
+
 
     @widget.optimize_button.clicked.connect
     def _optimize_quantification():

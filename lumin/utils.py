@@ -34,21 +34,21 @@ def parse_input_output(input_file: str = None, project_dir: str = None, selectio
 
 
         # Parse output
-        if not os.path.isdir(project_dir) or (selection_mode == 'Automated' or selection_mode is None):
-            if os.path.exists(project_dir): shutil.rmtree(project_dir, ignore_errors=True)
-            os.makedirs(project_dir)
+        if (not os.path.isdir(project_dir) or not os.path.exists(f'{project_dir}/annotated_images.csv')) or (selection_mode == 'Automated' or selection_mode is None):
+            if os.path.exists(os.path.join(project_dir, 'Segmentation')): shutil.rmtree(os.path.join(project_dir, 'Segmentation'), ignore_errors=True)
+            if os.path.exists(os.path.join(project_dir, 'Quantification')): shutil.rmtree(os.path.join(project_dir, 'Quantification'), ignore_errors=True)
+            if os.path.exists(os.path.join(project_dir, 'annotated_images.csv')): shutil.rmtree(os.path.join(project_dir, 'annotated_images.csv'), ignore_errors=True)
 
-        # Check if output csv file in output folder. If yes, read the images already annotated
-        if os.path.exists(f'{project_dir}/annotated_images.csv'):
-            annotated_image_df = pd.read_csv(f'{project_dir}/annotated_images.csv', index_col=0, sep=None) 
-            
-        else: # Otherwise create output DF
-            if os.path.exists(project_dir): 
-                shutil.rmtree(project_dir, ignore_errors=True)
+            os.makedirs(project_dir, exist_ok=True)
+
             if co_stain == True:
                 annotated_image_df = pd.DataFrame(columns=['image_id','filename','biological_replicate', 'stimulation','plate_id', 'marker_name','max_label','image_stack','mask'])
             else: 
                 annotated_image_df = pd.DataFrame(columns=['image_id','filename','biological_replicate', 'stimulation','plate_id', 'max_label','image_stack','mask'])
+
+        # Check if output csv file in output folder. If yes, read the images already annotated
+        else:
+            annotated_image_df = pd.read_csv(f'{project_dir}/annotated_images.csv', index_col=0, sep=None) 
 
     except Exception as e: 
         print("\nAn error occurred:", e)
@@ -293,11 +293,11 @@ def percentage_responding(cell_properties_df: pd.DataFrame, analysis_type = None
     # Compute replicate-level means
     if 'marker' in cell_properties_df.columns:
         response_perc_rep_df = response_perc_well_df.groupby(
-            ['biological_replicate', 'stimulation', 'marker'], observed=True
+            ['biological_replicate', 'stimulation', 'marker', 'plate_id'], observed=True
         )[response_col].mean().reset_index()
     else:
         response_perc_rep_df = response_perc_well_df.groupby(
-            ['biological_replicate', 'stimulation'], observed=True
+            ['biological_replicate', 'stimulation', 'plate_id'], observed=True
         )[response_col].mean().reset_index()
 
     return response_perc_well_df, response_perc_rep_df
