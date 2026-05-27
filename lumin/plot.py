@@ -227,7 +227,7 @@ def cellwise_traces(cell_properties_df: pd.DataFrame, trace: str = None, baselin
 
             ax_plot.set_ylabel(f"{cell['label']}.", rotation=0, fontsize=12, labelpad=10)
             ax_plot.yaxis.tick_right()
-            ax_plot.set_ylim(-0.2, cell_properties_df[trace].explode().max())
+            ax_plot.set_ylim(-0.2, cell_properties_df[trace].explode().max()) # Udate from here
 
             if spikes and 'peak_location' in cell and isinstance(cell['peak_location'], (list, np.ndarray)):
                 for peak in cell.peak_location:

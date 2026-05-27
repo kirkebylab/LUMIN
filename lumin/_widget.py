@@ -1498,11 +1498,13 @@ def single_cell_widget():
                             plt.close()
 
                     # Save results
-                    cell_properties_df.to_pickle(os.path.join(table_dir, 'cell_properties_spontaneous.pkl'))
-                    cell_properties_filtered_df.to_pickle(os.path.join(table_dir, 'cell_properties_spontaneous_active_cells.pkl'))
+                    cell_properties_df.to_pickle(os.path.join(table_dir, 'cell_properties_spontaneous_full.pkl'))
+                    cell_properties_filtered_df.to_pickle(os.path.join(table_dir, 'cell_properties_spontaneous_active_cells_full.pkl'))
 
-                    cell_properties_df.to_csv(os.path.join(table_dir, 'cell_properties_spontaneous.csv'), sep=';')
-                    cell_properties_filtered_df.to_csv(os.path.join(table_dir, 'cell_properties_spontaneous_active_cells.csv'), sep=';')
+
+                    columns_to_keep = [col for col in cell_properties_df.columns if col in ['image_id', 'biological_replicate', 'stimulation','filename', 'plate_id', 'frequency', 'amplitude', 'prominence', 'width','rise_time', 'decay_time', 'response']]
+                    cell_properties_df[columns_to_keep].to_csv(os.path.join(table_dir, 'cell_properties_spontaneous_reduced.csv'), sep=';')
+                    cell_properties_filtered_df[columns_to_keep].to_csv(os.path.join(table_dir, 'cell_properties_spontaneous_active_cells_reduced.csv'), sep=';')
 
                     
 
@@ -1669,7 +1671,7 @@ def single_cell_widget():
 
 
                     elif activity_type == 'Spontaneous':
-                        parameter_list.extend([f'Quantification - Smoothing: {smoothing}','Quantification - Prominence threshold: {spike_prominence_threshold}', f'Quantification - Amplitude width ratio: {spike_amplitude_width_ratio}',   f'Quantification - Imaging interval: {imaging_interval}', f'Quantification - KCl stimulation frame: {kcl_frame}'])
+                        parameter_list.extend([f'Quantification - Smoothing: {smoothing}',f'Quantification - Prominence threshold: {spike_prominence_threshold}', f'Quantification - Amplitude width ratio: {spike_amplitude_width_ratio}',   f'Quantification - Imaging interval: {imaging_interval}', f'Quantification - KCl stimulation frame: {kcl_frame}'])
 
                         cell_properties_df, start_frame, end_frame = activity.spike(cell_properties_df = cell_properties_df, prominence = spike_prominence_threshold,  amplitude_width_ratio=spike_amplitude_width_ratio, imaging_interval=imaging_interval, start_frame=analysis_window_start, end_frame = analysis_window_end, smoothing=smoothing)
                         spontaneous_activity_output()
@@ -1677,7 +1679,7 @@ def single_cell_widget():
 
                 elif analysis_mode == 'Spontaneous activity':
                     print('Running spontaneous activity analysis...')
-                    parameter_list.extend([f'Quantification - Smoothing: {smoothing}', 'Quantification - Prominence threshold: {spike_prominence_threshold}', f'Quantification - Amplitude width ratio: {spike_amplitude_width_ratio}',   f'Quantification - Imaging interval: {imaging_interval}', f'Quantification - KCl stimulation frame: {kcl_frame}'])
+                    parameter_list.extend([f'Quantification - Smoothing: {smoothing}', f'Quantification - Prominence threshold: {spike_prominence_threshold}', f'Quantification - Amplitude width ratio: {spike_amplitude_width_ratio}',   f'Quantification - Imaging interval: {imaging_interval}', f'Quantification - KCl stimulation frame: {kcl_frame}'])
 
                     # Detect events
                     cell_properties_df, start_frame, end_frame = activity.spike(cell_properties_df = cell_properties_df, prominence = spike_prominence_threshold,  amplitude_width_ratio=spike_amplitude_width_ratio, imaging_interval=imaging_interval, end_frame = kcl_frame, smoothing = smoothing)
